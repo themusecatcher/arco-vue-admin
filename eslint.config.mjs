@@ -23,6 +23,7 @@ export default defineConfigWithVueTs(
     name: 'custom-eslint-rules',
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      'vue/multi-word-component-names': 'off',
       // '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       // '@typescript-eslint/no-duplicate-enum-values': 'off',
