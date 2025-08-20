@@ -1,51 +1,64 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-import svgLoader from 'vite-svg-loader';
-import configArcoStyleImportPlugin from './plugin/arcoStyleImport';
+import { resolve } from 'path'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import svgLoader from 'vite-svg-loader'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ArcoResolver } from 'unplugin-vue-components/resolvers'
+import { vitePluginForArco } from '@arco-plugins/vite-vue'
 
 export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
     svgLoader({ svgoConfig: {} }),
-    configArcoStyleImportPlugin(),
+    AutoImport({
+      resolvers: [ArcoResolver()]
+    }),
+    Components({
+      resolvers: [
+        ArcoResolver({
+          sideEffect: true
+        })
+      ]
+    }),
+    vitePluginForArco({
+      style: 'css'
+    })
   ],
   resolve: {
     alias: [
       {
         find: '@',
-        replacement: resolve(__dirname, '../src'),
+        replacement: resolve(__dirname, '../src')
       },
       {
         find: 'assets',
-        replacement: resolve(__dirname, '../src/assets'),
+        replacement: resolve(__dirname, '../src/assets')
       },
       {
         find: 'vue-i18n',
-        replacement: 'vue-i18n/dist/vue-i18n.cjs.js', // Resolve the i18n warning issue
+        replacement: 'vue-i18n/dist/vue-i18n.cjs.js' // Resolve the i18n warning issue
       },
       {
         find: 'vue',
-        replacement: 'vue/dist/vue.esm-bundler.js', // compile template
-      },
+        replacement: 'vue/dist/vue.esm-bundler.js' // compile template
+      }
     ],
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js']
   },
   define: {
-    'process.env': {},
+    'process.env': {}
   },
   css: {
     preprocessorOptions: {
       less: {
         modifyVars: {
-          hack: `true; @import (reference) "${resolve(
-            'src/assets/style/breakpoint.less'
-          )}";`,
+          hack: `true; @import (reference) "${resolve('src/assets/style/breakpoint.less')}";`
         },
-        javascriptEnabled: true,
-      },
-    },
-  },
-});
+        javascriptEnabled: true
+      }
+    }
+  }
+})
